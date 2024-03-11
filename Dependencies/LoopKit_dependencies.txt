@@ -1,0 +1,31 @@
+LoopKit dependencies are copied from LoopWorkspace dev:
+ce74cf4 Bring in OmniBLE updates
+
+CGMBLEKit:
+4eb3c94 Updated translations from Lokalise on Sun Oct 22 11:55:50 CDT 2023 (#190)
+
+dexcom-share-client-swift:
+0f93513 Merge pull request #41 from LoopKit/tidepool-sync
+
+G7SensorKit:
+83d8aaf Merge pull request #20 from LoopKit/tidepool-sync
+
+LibreTransmitter:
+c01eba6 Merge pull request #13 from LoopKit/translations
+
+LoopKit:
+2f535b3 Add Simulator Settings Row to DIY version for pump and CGM simulators (#525)
+
+MinimedKit:
+d29ee36 Updated translations from Lokalise on Sun Oct 22 11:55:50 CDT 2023 (#11)
+
+Skipped copying dependency, MKRingProgressView is now a Swift package: 'Use MKRingProgressView from swift package' in LoopWorkspace 00f7b05c3b451ee416a98a60312f7295f4dd0813 (05/06/2023)
+
+OmniBLE:
+bfe2795 Improved verification and checking to prevent possible 0x31 pod faults (#110)
+
+OmniKit:
+a78fdcd Pod setup restart fixes and improvements (Loop issue #2117) (#27)
+
+Skipped copying dependency, rileylink_ios is now RileyLinkKit: 'Reorg ps2 frameworks (#53) Update gitmodules to point to LoopKit repos instead of ps2 repos' LoopWorkspace 2d9c9a5537ff0c2a0ef6af7539bf70f16d55eaf3
+
