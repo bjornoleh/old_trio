@@ -27,5 +27,6 @@ bfe2795 Improved verification and checking to prevent possible 0x31 pod faults (
 OmniKit:
 a78fdcd Pod setup restart fixes and improvements (Loop issue #2117) (#27)
 
-Skipped copying dependency, rileylink_ios is now RileyLinkKit: 'Reorg ps2 frameworks (#53) Update gitmodules to point to LoopKit repos instead of ps2 repos' LoopWorkspace 2d9c9a5537ff0c2a0ef6af7539bf70f16d55eaf3
+RileyLinkKit:
+a0e419d Update build settings to avoid macos build during translation import
 

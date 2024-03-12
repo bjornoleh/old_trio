@@ -87,12 +87,12 @@ git log -1 --oneline --abbrev=7 >> ../../Open-iAPS/Dependencies/LoopKit_dependen
 echo "" >> ../../Open-iAPS/Dependencies/LoopKit_dependencies.txt
 cd ..
 
-echo "Skipped copying dependency, rileylink_ios is now RileyLinkKit: 'Reorg ps2 frameworks (#53) Update gitmodules to point to LoopKit repos instead of ps2 repos' LoopWorkspace 2d9c9a5537ff0c2a0ef6af7539bf70f16d55eaf3"  >> ../Open-iAPS/Dependencies/LoopKit_dependencies.txt
-#cd rileylink_ios
-#echo "rileylink_ios:" >> ../../Open-iAPS/Dependencies/LoopKit_dependencies.txt
-#git log -1 --oneline --abbrev=7 >> ../../Open-iAPS/Dependencies/LoopKit_dependencies.txt
-echo "" >> ../Open-iAPS/Dependencies/LoopKit_dependencies.txt
-#cd ..
+# echo "Skipped copying dependency, rileylink_ios is now RileyLinkKit: 'Reorg ps2 frameworks (#53) Update gitmodules to point to LoopKit repos instead of ps2 repos' LoopWorkspace 2d9c9a5537ff0c2a0ef6af7539bf70f16d55eaf3"  >> ../Open-iAPS/Dependencies/LoopKit_dependencies.txt
+cd RileyLinkKit
+echo "RileyLinkKit:" >> ../../Open-iAPS/Dependencies/LoopKit_dependencies.txt
+git log -1 --oneline --abbrev=7 >> ../../Open-iAPS/Dependencies/LoopKit_dependencies.txt
+echo "" >> ../../Open-iAPS/Dependencies/LoopKit_dependencies.txt
+cd ..
 
 # Copy LoopKit dependencies@
 
@@ -114,7 +114,7 @@ cp -p -R ./OmniBLE ../Open-iAPS/Dependencies
 
 cp -p -R ./OmniKit ../Open-iAPS/Dependencies
 
-#cp -p -R ./rileylink_ios ../Open-iAPS/Dependencies
+cp -p -R ./RileyLinkKit ../Open-iAPS/Dependencies
 
 
 exit
