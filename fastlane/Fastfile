@@ -29,10 +29,10 @@ platform :ios do
   lane :build_iAPS do
     setup_ci if ENV['CI']
 
-# Define method to parse xcconfig file
-def parse_xcconfig_file(path, team_id)
-  xcconfig = {}
-  File.open(path).each_line do |line|
+    # Define method to parse xcconfig file
+    def parse_xcconfig_file(path, team_id)
+    xcconfig = {}
+    File.open(path).each_line do |line|
     line.strip!
     next if line.empty? || line.start_with?('//')
 
