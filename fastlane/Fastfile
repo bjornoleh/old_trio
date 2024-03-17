@@ -28,7 +28,16 @@ platform :ios do
   desc "Build iAPS"
   lane :build_iAPS do
     setup_ci if ENV['CI']
-    
+
+    # Path to your config.xcconfig file
+    xcconfig_path = "#{GITHUB_WORKSPACE}/Config.xcconfig"
+
+    # Load the variables from config.xcconfig
+    xcconfig = xcconfig_file(path: xcconfig_path)
+
+    # Access specific variables from the xcconfig file
+    APP_IDENTIFIER = xcconfig["BUNDLE_IDENTIFIER"]
+
     update_project_team(
       path: "#{GITHUB_WORKSPACE}/FreeAPS.xcodeproj",
       teamid: "#{TEAMID}"
