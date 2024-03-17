@@ -30,19 +30,24 @@ platform :ios do
     setup_ci if ENV['CI']
 
     # Define method to parse xcconfig file
-    def parse_xcconfig_file(path, team_id)
-      xcconfig = {}
-      File.open(path).each_line do |line|
-        line.strip!
-        next if line.empty? || line.start_with?('//')
+def parse_xcconfig_file(path, team_id)
+  xcconfig = {}
+  File.open(path).each_line do |line|
+    line.strip!
+    next if line.empty? || line.start_with?('//')
 
-        key, value = line.split('=').map(&:strip)
-        # Replace $(DEVELOPMENT_TEAM) with the actual team ID
-        value = value.gsub('$(DEVELOPMENT_TEAM)', team_id)
-        xcconfig[key] = value
-      end
-      xcconfig
-    end
+    key, value = line.split('=').map(&:strip)
+    # Replace $(DEVELOPMENT_TEAM) with the actual team ID
+    value = value.gsub('$(DEVELOPMENT_TEAM)', team_id)
+    xcconfig[key] = value
+  end
+  xcconfig
+end
+
+platform :ios do
+  desc "Build iAPS"
+  lane :build_iAPS do
+    setup_ci if ENV['CI']
 
     # Path to your config.xcconfig file
     xcconfig_path = "#{GITHUB_WORKSPACE}/Config.xcconfig"
@@ -52,6 +57,10 @@ platform :ios do
 
     # Access specific variables from the xcconfig file
     APP_IDENTIFIER = xcconfig["BUNDLE_IDENTIFIER"]
+
+    # rest of your code...
+  end
+end
 
     update_project_team(
       path: "#{GITHUB_WORKSPACE}/FreeAPS.xcodeproj",
