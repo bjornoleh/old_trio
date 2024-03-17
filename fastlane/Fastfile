@@ -24,12 +24,8 @@ DEVICE_ID = ENV["DEVICE_ID"]
 ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
 APP_IDENTIFIER = "ru.artpancreas.#{TEAMID}.FreeAPS-iAPSdev"
 
-platform :ios do
-  desc "Build iAPS"
-  lane :build_iAPS do
-    setup_ci if ENV['CI']
 
-    # Define method to parse xcconfig file
+# Define method to parse xcconfig file
 def parse_xcconfig_file(path, team_id)
   xcconfig = {}
   File.open(path).each_line do |line|
