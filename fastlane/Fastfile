@@ -30,13 +30,15 @@ platform :ios do
     setup_ci if ENV['CI']
 
     # Define method to parse xcconfig file
-    def parse_xcconfig_file(path)
+    def parse_xcconfig_file(path, team_id)
       xcconfig = {}
       File.open(path).each_line do |line|
         line.strip!
         next if line.empty? || line.start_with?('//')
 
         key, value = line.split('=').map(&:strip)
+        # Replace $(DEVELOPMENT_TEAM) with the actual team ID
+        value = value.gsub('$(DEVELOPMENT_TEAM)', team_id)
         xcconfig[key] = value
       end
       xcconfig
@@ -46,7 +48,7 @@ platform :ios do
     xcconfig_path = "#{GITHUB_WORKSPACE}/Config.xcconfig"
 
     # Load the variables from config.xcconfig
-    xcconfig = parse_xcconfig_file(xcconfig_path)
+    xcconfig = parse_xcconfig_file(xcconfig_path, TEAMID)
 
     # Access specific variables from the xcconfig file
     APP_IDENTIFIER = xcconfig["BUNDLE_IDENTIFIER"]
