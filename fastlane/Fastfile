@@ -37,7 +37,7 @@ platform :ios do
         next if line.empty? || line.start_with?('//')
         key, value = line.split('=').map(&:strip)
         # Replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-        value = value.gsub('$(DEVELOPMENT_TEAM)', TEAMID)
+        value = value.gsub('$(DEVELOPMENT_TEAM)', #{TEAMID})
         xcconfig[key] = value
       end
       xcconfig
