@@ -37,7 +37,9 @@ platform :ios do
         puts "Processing line: #{line}"
         line.strip!
         next if line.empty? || line.start_with?('//')
-        key, value = line.split('=').map(&:strip)
+        parts = line.split('=')
+        next if parts.length < 2  # Skip lines without '='
+        key, value = parts.map(&:strip)
         # Replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
         value = value.gsub('$(DEVELOPMENT_TEAM)', ENV["TEAMID"])
         xcconfig[key] = value
