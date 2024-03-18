@@ -173,6 +173,8 @@ platform :ios do
       }
     end
 
+    BUNDLE_ID = ENV["BUNDLE_ID"]
+
     configure_bundle_id("FreeAPS", "#{BUNDLE_ID}", [
       Spaceship::ConnectAPI::BundleIdCapability::Type::APP_GROUPS,
       Spaceship::ConnectAPI::BundleIdCapability::Type::HEALTHKIT,
@@ -200,7 +202,9 @@ platform :ios do
       issuer_id: "#{FASTLANE_ISSUER_ID}",
       key_content: "#{FASTLANE_KEY}"
     )
-    
+
+    BUNDLE_ID = ENV["BUNDLE_ID"]
+
     match(
       type: "appstore",
       force: true,
@@ -228,7 +232,8 @@ platform :ios do
       bundle_id = Spaceship::ConnectAPI::BundleId.find(identifier)
     end
 
-    find_bundle_id(ENV["BUNDLE_ID"])
+    BUNDLE_ID = ENV["BUNDLE_ID"]
+    find_bundle_id(#{"BUNDLE_ID}")
 
     match(
       type: "appstore",
