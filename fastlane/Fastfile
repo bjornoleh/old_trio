@@ -233,7 +233,7 @@ platform :ios do
     end
 
     BUNDLE_ID = ENV["BUNDLE_ID"]
-    find_bundle_id(#{"BUNDLE_ID}")
+    find_bundle_id("#{BUNDLE_ID}")
 
     match(
       type: "appstore",
