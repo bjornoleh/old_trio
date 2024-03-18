@@ -24,30 +24,30 @@ DEVICE_ID = ENV["DEVICE_ID"]
 ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
 
 
-    # Define method to parse xcconfig file, and replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-    def parse_xcconfig_file(path)
-      xcconfig = {}
-      File.open(path).each_line do |line|
-        line.strip!
-        next if line.empty? || line.start_with?('//')
-        parts = line.split('=')
-        next if parts.length < 2  # Skip lines without '='
-        key, value = parts.map(&:strip)
-        # Replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-        value = value.gsub('$(DEVELOPMENT_TEAM)', TEAMID)
-        xcconfig[key] = value
+# Define method to parse xcconfig file, and replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
+def parse_xcconfig_file(path)
+  xcconfig = {}
+  File.open(path).each_line do |line|
+    line.strip!
+    next if line.empty? || line.start_with?('//')
+    parts = line.split('=')
+    next if parts.length < 2  # Skip lines without '='
+    key, value = parts.map(&:strip)
+    # Replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
+    value = value.gsub('$(DEVELOPMENT_TEAM)', TEAMID)
+    xcconfig[key] = value
       end
       xcconfig
     end
 
-    # Path to config.xcconfig file
-    xcconfig_path = "#{GITHUB_WORKSPACE}/Config.xcconfig"
+# Path to config.xcconfig file
+xcconfig_path = "#{GITHUB_WORKSPACE}/Config.xcconfig"
 
-    # Load the variables from config.xcconfig
-    xcconfig = parse_xcconfig_file(xcconfig_path)
+# Load the variables from config.xcconfig
+xcconfig = parse_xcconfig_file(xcconfig_path)
 
-    # Access BUNDLE_IDENTIFIER from the xcconfig file after replacing $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-    ENV["BUNDLE_ID"] = xcconfig["BUNDLE_IDENTIFIER"]
+# Access BUNDLE_IDENTIFIER from the xcconfig file after replacing $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
+ENV["BUNDLE_ID"] = xcconfig["BUNDLE_IDENTIFIER"]
 
 platform :ios do
   desc "Build iAPS"
