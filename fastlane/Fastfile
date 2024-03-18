@@ -31,21 +31,17 @@ platform :ios do
 
     # Define method to parse xcconfig file, and replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
     def parse_xcconfig_file(path)
-      puts "Parsing xcconfig file: #{path}"
       xcconfig = {}
       File.open(path).each_line do |line|
-        puts "Processing line: #{line}"
         line.strip!
         next if line.empty? || line.start_with?('//')
         parts = line.split('=')
         next if parts.length < 2  # Skip lines without '='
         key, value = parts.map(&:strip)
         # Replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-        value = value.gsub('$(DEVELOPMENT_TEAM)', ENV["TEAMID"])
+        value = value.gsub('$(DEVELOPMENT_TEAM)', TEAMID)
         xcconfig[key] = value
-        puts "Added key-value pair: #{key} => #{value}"
       end
-      puts "Parsed xcconfig: #{xcconfig}"
       xcconfig
     end
 
