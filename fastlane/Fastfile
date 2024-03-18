@@ -51,7 +51,7 @@ platform :ios do
     xcconfig = parse_xcconfig_file(xcconfig_path)
 
     # Access BUNDLE_IDENTIFIER from the xcconfig file after replacing $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-    BUNDLE_ID = xcconfig["BUNDLE_IDENTIFIER"]
+    ENV["BUNDLE_ID"] = xcconfig["BUNDLE_IDENTIFIER"]
 
     update_project_team(
       path: "#{GITHUB_WORKSPACE}/FreeAPS.xcodeproj",
