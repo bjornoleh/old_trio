@@ -32,13 +32,12 @@ platform :ios do
     # Define method to parse xcconfig file, and replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
     def parse_xcconfig_file(path)
       xcconfig = {}
-      team_id = ENV["TEAMID"]
       File.open(path).each_line do |line|
         line.strip!
         next if line.empty? || line.start_with?('//')
         key, value = line.split('=').map(&:strip)
         # Replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-        value = value.gsub('$(DEVELOPMENT_TEAM)', "#{team_id}")
+        value = value.gsub('$(DEVELOPMENT_TEAM)', ENV["TEAMID"])
         xcconfig[key] = value
       end
       xcconfig
