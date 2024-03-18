@@ -30,7 +30,7 @@ platform :ios do
     setup_ci if ENV['CI']
 
     # Define method to parse xcconfig file, and replace $(DEVELOPMENT_TEAM) with ENV["TEAMID"]
-    def parse_xcconfig_file(path, team_id)
+    def parse_xcconfig_file(path)
       xcconfig = {}
       File.open(path).each_line do |line|
         line.strip!
