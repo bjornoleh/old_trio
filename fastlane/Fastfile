@@ -160,6 +160,7 @@ platform :ios do
   lane :identifiers do
     setup_ci if ENV['CI']
     ENV["MATCH_READONLY"] = false.to_s
+    BUNDLE_ID = ENV["BUNDLE_ID"]
     
     app_store_connect_api_key(
       key_id: "#{FASTLANE_KEY_ID}",
