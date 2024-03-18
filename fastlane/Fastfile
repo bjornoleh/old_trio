@@ -228,7 +228,7 @@ platform :ios do
       bundle_id = Spaceship::ConnectAPI::BundleId.find(identifier)
     end
 
-    find_bundle_id("#{BUNDLE_ID}")
+    find_bundle_id(ENV["BUNDLE_ID"])
 
     match(
       type: "appstore",
