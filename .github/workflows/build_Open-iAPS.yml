@@ -70,7 +70,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         # Get ref for nightscout/Open-iAPS:main
-        SHA=$(curl -sS https://api.github.com/repos/${{ env.UPSTREAM_REPO }}/git/refs \
+        SHA=$(curl -sS \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ env.UPSTREAM_REPO }}/git/refs \
           | jq '.[] | select(.ref == "refs/heads/main" ) | .object.sha' \
           | tr -d '"'
         );
