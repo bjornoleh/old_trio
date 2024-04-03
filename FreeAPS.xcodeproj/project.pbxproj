@@ -2134,6 +2134,7 @@
 			buildConfigurationList = 388E596725AD948E0019842D /* Build configuration list for PBXNativeTarget "FreeAPS" */;
 			buildPhases = (
 				B9CAAEFA2AE6FDE6000F68BC /* Run Script: get branch name and commit ID */,
+				B9267B8E2BBDEB8500C3E997 /* Run Script: replace "Loop" with "Open-iAPS" in LoopKit submodules */,
 				3811DEF525CA169200A708ED /* Swiftformat */,
 				388E595425AD948C0019842D /* Sources */,
 				388E595525AD948C0019842D /* Frameworks */,
@@ -2352,6 +2353,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "source \"${SRCROOT}\"/scripts/swiftformat.sh\n\n";
+		};
+		B9267B8E2BBDEB8500C3E997 /* Run Script: replace "Loop" with "Open-iAPS" in LoopKit submodules */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script: replace \"Loop\" with \"Open-iAPS\" in LoopKit submodules";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "# Replace \"Loop\" with \"Open-iAPS\" in .swift files\nfind CGMBLEKit G7SensorKit MinimedKit OmniBLE OmniKit dexcom-share-client-swift LibreTransmitter RileyLinkKit -name '*.swift' -exec grep -l '^ *Text *( *LocalizedString *( *' {} + | xargs sed -i \"\" 's/[[:<:]]Loop[[:>:]]/Open-iAPS/g'\n\n# Replace \"Loop\" with \"Open-iAPS\" in Localizable.strings files\nfind CGMBLEKit G7SensorKit MinimedKit OmniBLE OmniKit dexcom-share-client-swift LibreTransmitter RileyLinkKit -name 'Localizable.strings' -exec sed -i \"\" -E '/\".*\"/ s/[[:<:]]Loop[[:>:]]/Open-iAPS/g' {} +\n\n# Add a delay of 20 seconds\nsleep 20\n";
+			showEnvVarsInLog = 0;
 		};
 		B9CAAEFA2AE6FDE6000F68BC /* Run Script: get branch name and commit ID */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3038,7 +3059,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = FreeAPSWatch_WatchKit_Extension;
 				INFOPLIST_FILE = FreeAPSWatch/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Open-iAPS;
+				INFOPLIST_KEY_CFBundleDisplayName = "Open-iAPS";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BUNDLE_IDENTIFIER)";
 				MARKETING_VERSION = "$(APP_VERSION)";
@@ -3073,7 +3094,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IBSC_MODULE = FreeAPSWatch_WatchKit_Extension;
 				INFOPLIST_FILE = FreeAPSWatch/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Open-iAPS;
+				INFOPLIST_KEY_CFBundleDisplayName = "Open-iAPS";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(BUNDLE_IDENTIFIER)";
 				MARKETING_VERSION = "$(APP_VERSION)";
