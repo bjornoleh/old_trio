@@ -5,6 +5,7 @@ import Swinject
 extension CGM {
     struct RootView: BaseView {
         let resolver: Resolver
+        let displayClose: Bool
         @StateObject var state = StateModel()
         @State private var setupCGM = false
 
@@ -28,6 +29,44 @@ extension CGM {
                             }
                         }
                     }
+
+                    if let cgmFetchManager = state.cgmManager {
+                        if let appURL = state.urlOfApp()
+                        {
+                            Section {
+                                Button {
+                                    UIApplication.shared.open(appURL, options: [:]) { success in
+                                        if !success {
+                                            self.router.alertMessage
+                                                .send(MessageContent(content: "Unable to open the app", type: .warning))
+                                        }
+                                    }
+                                }
+
+                                label: {
+                                    Label(state.displayNameOfApp(), systemImage: "waveform.path.ecg.rectangle").font(.title3) }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .buttonStyle(.bordered)
+                            }
+                            .listRowBackground(Color.clear)
+                        } else if state.cgmCurrent.type == .nightscout && state.url != nil {
+                            Section {
+                                Button {
+                                    UIApplication.shared.open(state.url!, options: [:]) { success in
+                                        if !success {
+                                            self.router.alertMessage
+                                                .send(MessageContent(content: "No URL available", type: .warning))
+                                        }
+                                    }
+                                }
+                                label: { Label("Open URL", systemImage: "waveform.path.ecg.rectangle").font(.title3) }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .buttonStyle(.bordered)
+                            }
+                            .listRowBackground(Color.clear)
+                        }
+                    }
+
                     if state.cgmCurrent.type == .plugin {
                         Section {
                             Button("CGM Configuration") {
@@ -47,6 +86,14 @@ extension CGM {
                             }
                         }
                     }
+                    if state.cgmCurrent.type == .plugin && state.cgmCurrent.id.contains("Libre") {
+                        Section(header: Text("Calibrations")) {
+                            Text("Calibrations").navigationLink(to: .calibrations, from: self)
+                        }
+                    }
+
+                    // }
+
                     Section(header: Text("Calendar")) {
                         Toggle("Create events in calendar", isOn: $state.createCalendarEvents)
                         if state.calendarIDs.isNotEmpty {
@@ -66,6 +113,7 @@ extension CGM {
                 .onAppear(perform: configureView)
                 .navigationTitle("CGM")
                 .navigationBarTitleDisplayMode(.automatic)
+                .navigationBarItems(leading: displayClose ? Button("Close", action: state.hideModal) : nil)
                 .sheet(isPresented: $setupCGM) {
                     if let cgmFetchManager = state.cgmManager,
                        let cgmManager = cgmFetchManager.cgmManager,

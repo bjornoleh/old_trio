@@ -23,6 +23,8 @@ extension CGM {
         @Injected() var cgmManager: FetchGlucoseManager!
         @Injected() var calendarManager: CalendarManager!
         @Injected() var pluginCGMManager: PluginManager!
+        @Injected() private var broadcaster: Broadcaster!
+        @Injected() var nightscoutManager: NightscoutManager!
 
         @Published var setupCGM: Bool = false
         @Published var cgmCurrent = cgmDefaultName
@@ -33,6 +35,7 @@ extension CGM {
         @Persisted(key: "CalendarManager.currentCalendarID") var storedCalendarID: String? = nil
         @Published var cgmTransmitterDeviceAddress: String? = nil
         @Published var listOfCGM: [cgmName] = []
+        @Published var url: URL?
 
         override func subscribe() {
             // collect the list of CGM available with plugins and CGMType defined manually
@@ -65,6 +68,17 @@ extension CGM {
                 )
             }
 
+            url = nightscoutManager.cgmURL
+            switch url?.absoluteString {
+            case "http://127.0.0.1:1979":
+                url = URL(string: "spikeapp://")!
+            case "http://127.0.0.1:17580":
+                url = URL(string: "diabox://")!
+            //            case CGMType.libreTransmitter.appURL?.absoluteString:
+            //                showModal(for: .libreConfig)
+            default: break
+            }
+
             currentCalendarID = storedCalendarID ?? ""
             calendarIDs = calendarManager.calendarIDs()
             cgmTransmitterDeviceAddress = UserDefaults.standard.cgmTransmitterDeviceAddress
@@ -77,7 +91,7 @@ extension CGM {
                 .sink { [weak self] value in
                     guard let self = self else { return }
                     guard self.cgmManager.cgmGlucoseSourceType != nil else {
-                        self.settingsManager.settings.cgm = .nightscout
+                        self.settingsManager.settings.cgm = .none
                         return
                     }
                     if value.type != self.settingsManager.settings.cgm ||
@@ -89,6 +103,7 @@ extension CGM {
                             cgmGlucoseSourceType: value.type,
                             cgmGlucosePluginId: value.id
                         )
+                        self.setupCGM = false
                     }
                 }
                 .store(in: &lifetime)
@@ -118,6 +133,26 @@ extension CGM {
                 }
                 .store(in: &lifetime)
         }
+
+        func displayNameOfApp() -> String {
+            var nameOfApp = "Open Application"
+            switch cgmManager.cgmGlucoseSourceType {
+            case .plugin:
+                nameOfApp = "Open " + (cgmManager.cgmManager?.localizedTitle ?? "Application")
+            default:
+                nameOfApp = "Open " + (cgmManager.cgmGlucoseSourceType.displayName ?? "Application")
+            }
+            return nameOfApp
+        }
+
+        func urlOfApp() -> URL? {
+            switch cgmManager.cgmGlucoseSourceType {
+            case .plugin:
+                return cgmManager.cgmManager?.appURL
+            default:
+                return cgmManager.cgmGlucoseSourceType.appURL
+            }
+        }
     }
 }
 
@@ -135,18 +170,17 @@ extension CGM.StateModel: CompletionDelegate {
             cgmManager.updateGlucoseSource(cgmGlucoseSourceType: cgmCurrent.type, cgmGlucosePluginId: cgmCurrent.id)
         }
 
-        // refresh the upload options
-        settingsManager.settings.uploadGlucose = cgmManager.shouldSyncToRemoteService
-
         // update if required the Glucose source
+        DispatchQueue.main.async {
+            self.broadcaster.notify(GlucoseObserver.self, on: .main) {
+                $0.glucoseDidUpdate([])
+            }
+        }
     }
 }
 
 extension CGM.StateModel: CGMManagerOnboardingDelegate {
     func cgmManagerOnboarding(didCreateCGMManager manager: LoopKitUI.CGMManagerUI) {
-        // update the setting of upload Glucose in services
-        settingsManager.settings.uploadGlucose = cgmManager.shouldSyncToRemoteService
-
         // update the glucose source
         cgmManager.updateGlucoseSource(
             cgmGlucoseSourceType: cgmCurrent.type,
